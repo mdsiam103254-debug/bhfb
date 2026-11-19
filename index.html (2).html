@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Horizon Foundation, Bangladesh (BHFB)</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #0369a1;
+      --primary-hover: #0284c7;
+      --border: #cbd5e1;
+      --danger: #b91c1c;
+      --success: #15803d;
+    }
+    body.dark {
+      --bg: #0b1220;
+      --card: #131c31;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --border: #26344f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    button, select, input, textarea {
+      font-family: inherit;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      background: var(--card);
+      color: var(--text);
+    }
+    button.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.primary:hover { background: var(--primary-hover); }
+    button.danger {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+      cursor: pointer;
+    }
+    main { max-width: 980px; margin: 24px auto; padding: 0 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .hidden { display: none; }
+    .error { color: var(--danger); font-size: 0.9rem; margin-top: 8px; }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .item-row:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand" id="appTitle">Blue Horizon Foundation, Bangladesh (BHFB)</div>
+    <div class="controls">
+      <button id="langBtn" type="button">English</button>
+      <button id="themeBtn" type="button">Dark Mode</button>
+      <button id="logoutBtn" type="button" class="hidden">Logout</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Login Card -->
+    <section class="card" id="loginSection">
+      <h2 id="loginHeading">লগইন করুন</h2>
+      <p id="loginSub">সাধারণ সদস্য হিসেবে নাম ও ইমেইল দিন। মাস্টার অ্যাডমিন (<code>bluehorizonfoundationbd@gmail.com</code>) হিসেবে ঢুকতে পাসওয়ার্ড আবশ্যক।</p>
+      <form id="loginForm">
+        <div class="grid">
+          <div>
+            <label id="nameLabel" for="userName">আপনার নাম</label><br />
+            <input id="userName" type="text" placeholder="যেমন: মোহাম্মদ সিয়াম" required style="width:100%; margin-top:4px;" />
+          </div>
+          <div>
+            <label id="emailLabel" for="userEmail">ইমেইল ঠিকানা</label><br />
+            <input id="userEmail" type="email" placeholder="example@gmail.com" required style="width:100%; margin-top:4px;" />
+          </div>
+          <div id="passwordBox" class="hidden">
+            <label id="passLabel" for="adminPassword">অ্যাডমিন পাসওয়ার্ড</label><br />
+            <input id="adminPassword" type="password" placeholder="অ্যাডমিন পাসওয়ার্ড লিখুন" style="width:100%; margin-top:4px;" />
+          </div>
+        </div>
+        <div id="loginError" class="error"></div>
+        <div style="margin-top:14px;">
+          <button type="submit" class="primary" id="loginSubmitBtn">প্রবেশ করুন</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboardSection" class="hidden">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 id="welcomeText" style="margin:0;">স্বাগতম</h2>
+            <small id="roleText" style="color:var(--muted);"></small>
+          </div>
+          <span class="badge" id="roleBadge">Member</span>
+        </div>
+
+        <div class="grid" style="margin-top:16px;">
+          <div>
+            <label for="tierSelect">সাংগঠনিক স্তর (Hierarchy)</label><br />
+            <select id="tierSelect" style="width:100%; margin-top:4px;">
+              <option value="Central">কেন্দ্রীয় কমিটি (Central)</option>
+              <option value="District">জেলা কমিটি (District)</option>
+              <option value="Upazila">উপজেলা কমিটি (Upazila)</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap;">
+            <a id="fbLink" href="https://facebook.com" target="_blank" rel="noopener">Facebook Page</a>
+            <a id="formLink" href="https://docs.google.com/forms" target="_blank" rel="noopener">Donation / Membership Form</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Admin Panel (Only for bluehorizonfoundationbd@gmail.com with valid password) -->
+      <div class="card hidden" id="adminPanel">
+        <h3>মাস্টার অ্যাডমিন কন্ট্রোল (Master Admin)</h3>
+        <form id="addEntryForm" class="grid">
+          <input id="entryTitle" type="text" placeholder="কমিটি বা ঘোষণা শিরোনাম" required />
+          <input id="entryDetail" type="text" placeholder="বিস্তারিত / লিংক / তথ্য" required />
+          <button type="submit" class="primary">তথ্য যুক্ত করুন</button>
+        </form>
+      </div>
+
+      <!-- Committee & Updates List -->
+      <div class="card">
+        <h3 id="listHeading">কমিটি ও আপডেট তালিকা</h3>
+        <div id="entriesList"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const MASTER_ADMIN_EMAIL = "bluehorizonfoundationbd@gmail.com";
+    const MASTER_ADMIN_PASSWORD = "mdsiambintnf@#&619619619";
+
+    const emailInput = document.getElementById("userEmail");
+    const passwordBox = document.getElementById("passwordBox");
+    const passwordInput = document.getElementById("adminPassword");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const loginSection = document.getElementById("loginSection");
+    const dashboardSection = document.getElementById("dashboardSection");
+    const adminPanel = document.getElementById("adminPanel");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const tierSelect = document.getElementById("tierSelect");
+    const entriesList = document.getElementById("entriesList");
+    const addEntryForm = document.getElementById("addEntryForm");
+
+    let currentLang = "bn";
+    let entries = JSON.parse(localStorage.getItem("bhfb_entries") || "[]");
+    if (entries.length === 0) {
+      entries = [
+        { id: 1, tier: "Central", title: "কেন্দ্রীয় কার্যনির্বাহী কমিটি", detail: "ব্লু হরাইজন ফাউন্ডেশন বাংলাদেশ" },
+        { id: 2, tier: "District", title: "কক্সবাজার জেলা সমন্বয়", detail: "স্বেচ্ছাসেবক ও সদস্য তালিকা" },
+        { id: 3, tier: "Upazila", title: "উপজেলা শাখা কার্যক্রম", detail: "স্থানীয় মানবিক ও পরিবেশ উদ্যোগ" }
+      ];
+      localStorage.setItem("bhfb_entries", JSON.stringify(entries));
+    }
+
+    function togglePasswordField() {
+      const val = emailInput.value.trim().toLowerCase();
+      if (val === MASTER_ADMIN_EMAIL.toLowerCase()) {
+        passwordBox.classList.remove("hidden");
+        passwordInput.required = true;
+      } else {
+        passwordBox.classList.add("hidden");
+        passwordInput.required = false;
+        passwordInput.value = "";
+      }
+    }
+
+    emailInput.addEventListener("input", togglePasswordField);
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      loginError.textContent = "";
+
+      const name = document.getElementById("userName").value.trim();
+      const email = emailInput.value.trim().toLowerCase();
+      const pass = passwordInput.value;
+
+      let role = "Member";
+      if (email === MASTER_ADMIN_EMAIL.toLowerCase()) {
+        if (pass !== MASTER_ADMIN_PASSWORD) {
+          loginError.textContent = "মাস্টার অ্যাডমিন পাসওয়ার্ড সঠিক নয়!";
+          return;
+        }
+        role = "Master Admin";
+      }
+
+      const session = { name, email, role };
+      localStorage.setItem("bhfb_session", JSON.stringify(session));
+      renderSession(session);
+    });
+
+    function renderSession(session) {
+      loginSection.classList.add("hidden");
+      dashboardSection.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
+
+      document.getElementById("welcomeText").textContent = `স্বাগতম, ${session.name}`;
+      document.getElementById("roleText").textContent = `Email: ${session.email}`;
+      document.getElementById("roleBadge").textContent = session.role;
+
+      if (session.role === "Master Admin") {
+        adminPanel.classList.remove("hidden");
+      } else {
+        adminPanel.classList.add("hidden");
+      }
+      renderEntries(session.role === "Master Admin");
+    }
+
+    function renderEntries(isAdmin) {
+      const selectedTier = tierSelect.value;
+      const filtered = entries.filter(item => item.tier === selectedTier);
+      entriesList.innerHTML = "";
+
+      if (filtered.length === 0) {
+        entriesList.innerHTML = "<p>এই স্তরে কোনো তথ্য নেই।</p>";
+        return;
+      }
+
+      filtered.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "item-row";
+        row.innerHTML = `
+          <div>
+            <strong>${item.title}</strong><br />
+            <span style="color:var(--muted);">${item.detail}</span>
+          </div>
+          ${isAdmin ? `<button type="button" class="danger" onclick="deleteEntry(${item.id})">Delete</button>` : ""}
+        `;
+        entriesList.appendChild(row);
+      });
+    }
+
+    window.deleteEntry = function (id) {
+      const session = JSON.parse(localStorage.getItem("bhfb_session") || "null");
+      if (!session || session.role !== "Master Admin") return;
+      entries = entries.filter(item => item.id !== id);
+      localStorage.setItem("bhfb_entries", JSON.stringify(entries));
+      renderEntries(true);
+    };
+
+    addEntryForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const session = JSON.parse(localStorage.getItem("bhfb_session") || "null");
+      if (!session || session.role !== "Master Admin") return;
+
+      const title = document.getElementById("entryTitle").value.trim();
+      const detail = document.getElementById("entryDetail").value.trim();
+      entries.push({
+        id: Date.now(),
+        tier: tierSelect.value,
+        title,
+        detail
+      });
+      localStorage.setItem("bhfb_entries", JSON.stringify(entries));
+      addEntryForm.reset();
+      renderEntries(true);
+    });
+
+    tierSelect.addEventListener("change", () => {
+      const session = JSON.parse(localStorage.getItem("bhfb_session") || "null");
+      renderEntries(session && session.role === "Master Admin");
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("bhfb_session");
+      location.reload();
+    });
+
+    document.getElementById("themeBtn").addEventListener("click", (e) => {
+      document.body.classList.toggle("dark");
+      e.target.textContent = document.body.classList.contains("dark") ? "Light Mode" : "Dark Mode";
+    });
+
+    document.getElementById("langBtn").addEventListener("click", (e) => {
+      if (currentLang === "bn") {
+        currentLang = "en";
+        e.target.textContent = "বাংলা";
+        document.getElementById("loginHeading").textContent = "Sign In";
+        document.getElementById("loginSubmitBtn").textContent = "Continue";
+      } else {
+        currentLang = "bn";
+        e.target.textContent = "English";
+        document.getElementById("loginHeading").textContent = "লগইন করুন";
+        document.getElementById("loginSubmitBtn").textContent = "প্রবেশ করুন";
+      }
+    });
+
+    const savedSession = JSON.parse(localStorage.getItem("bhfb_session") || "null");
+    if (savedSession) {
+      renderSession(savedSession);
+    }
+  </script>
+</body>
+</html>
